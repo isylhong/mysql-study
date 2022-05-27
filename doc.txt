@@ -1,0 +1,24 @@
+EXPLAIN中type各字段含义：type字段主要用于确定where比较中使用的字段是否存在于索引中，且使用到的是何种索引。
+const: 
+  1) 使用WHERE，且where的比较字段存在于索引中，且where中比较字段的值可以唯一确定一条记录(即：where中使用的比较字段是唯一性索引字段)。
+ref: 
+  1) 使用WHERE，且where的比较字段存在于索引中，且where中比较字段的值可能匹配到多条记录(即：where中使用的比较字段不是唯一性索引字段)。
+index: 
+  1) 未使用WHERE, 且要查询的字段都存在于索引中。
+	2) 使用GROUP BY，且group by的分组字段存在于索引中
+ALL：
+  1) 使用Where，且where中的比较字段不存在于索引中。 
+	2) 未使用Where，且查询的字段中存在部分字段不在索引字段中。
+
+
+EXPLAIN中extra各字段含义：
+Using index：表示未通过索引节点去磁盘查找其他字段内容，所要查询的字段索引中都保存有，用于确定要查询的字段是否存在于索引中。查询满足以下任意一个条件时，extra=Using index。
+	1) 使用WHERE，且where的所有判断条件字段在索引中都存在，且查询的结果字段索引节点中都保存有。
+	2) 未使用WHERE,且查询的结果字段索引节点中都保存有。
+Using where：表示where判断条件中未使用到索引节点中的字段内容。查询满足以下任意一个条件时，extra=Using where。
+  1) 使用WHERE，且where中使用的判断字段不存在于索引中。
+Using temporary:
+  1) 使用GROUP BY，且group by的分组字段不存在于索引中。   执行GROUP BY前会先执行ORDER BY进行排序（未使用到索引情况下进行分组，会用到临时表）
+Using filesort:
+  1) 使用GROUP BY，且group by的分组字段不存在于索引中。
+	1) 使用ORDER BY，且查询的字段中存在部分字段不在索引字段中。
