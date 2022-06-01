@@ -21,8 +21,7 @@ DROP FUNCTION 函数名;
 DROP FUNCTION IF EXISTS rand_str;
 DELIMITER $$
 -- 返回指定长度随机字符串
-CREATE FUNCTION rand_str(n INT)
-RETURNS VARCHAR(255)
+CREATE FUNCTION getRandStr(n INT) RETURNS VARCHAR(255)
 BEGIN
  DECLARE chars_str VARCHAR(100) DEFAULT 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
  DECLARE return_str VARCHAR(255) DEFAULT '';
@@ -35,16 +34,14 @@ BEGIN
 END $$
 DELIMITER ;
 
-SELECT rand_str(6);
+SELECT getRandStr(6);
 
 
 
-
-DROP FUNCTION IF EXISTS rand_num;
+DROP FUNCTION IF EXISTS getRandNum;
 DELIMITER $$
 -- 产生指定范围内的随机数值, [baseNum,(baseNum+rangeNum))
-CREATE FUNCTION rand_num(baseNum INT,rangeNum INT)
-RETURNS INT(11)
+CREATE FUNCTION getRandNum(baseNum INT,rangeNum INT) RETURNS INT(11)
 BEGIN
  DECLARE i INT DEFAULT 0;
  SET i = FLOOR(baseNum+RAND()*rangeNum);
@@ -52,16 +49,15 @@ BEGIN
 END $$
 DELIMITER ;
 
-SELECT rand_num(100,10);
+SELECT getRandNum(100,10);
 
 
 
 
-DROP FUNCTION IF EXISTS rand_post;
+DROP FUNCTION IF EXISTS getRandPost;
 DELIMITER $$
 -- 产生随机职位
-CREATE FUNCTION rand_post()
-RETURNS VARCHAR(10)
+CREATE FUNCTION getRandPost() RETURNS VARCHAR(10)
 BEGIN
   DECLARE postList VARCHAR(100) DEFAULT "java开发工程师,前端开发工程师,软件测试工程师,系统分析师,系统架构师,技术经理,CTO,项目组长,项目经理,项目总监,产品设计师,产品经理,技术销售工程师,技术支持工程师,培训讲师";
 	DECLARE i INT DEFAULT 0;
@@ -72,7 +68,4 @@ BEGIN
 END $$
 DELIMITER ;
 
-SELECT rand_post();
-
-
-
+SELECT getRandPost();
