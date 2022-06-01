@@ -15,51 +15,50 @@ CALL 存储过程名([arg1,arg2,...]);
 ******************** 存储过程 基本语法 end ********************
 
 
-
-DROP PROCEDURE IF EXISTS insert_dept;
-DELIMITER $$
 -- 向部门表(tbl_department)批量插入数据
-CREATE PROCEDURE insert_dept(IN begin_num INT(10),IN loop_count INT(10))
-BEGIN
- DECLARE i INT DEFAULT 0;
- SET autocommit=0;
- REPEAT
-	SET i = i + 1;
-	INSERT INTO tbl_department(dept_no,dept_name) VALUES((begin_num+i),CONCAT("部门",i));
- UNTIL i = loop_count END REPEAT;
- COMMIT;
-END $$
-DELIMITER ;
-
-CALL insert_dept(100,10);
-
-
-
-
-DROP PROCEDURE IF EXISTS insert_emp;
+DROP PROCEDURE IF EXISTS insertDept;
 DELIMITER $$
--- 向员工表(tbl_employee)批量插入数据
-CREATE PROCEDURE insert_emp(IN begin_num INT(10),IN loop_count INT(10))
+CREATE PROCEDURE insertDept(IN begin_num INT(10),IN loop_count INT(10))
 BEGIN
- DECLARE i INT DEFAULT 0;
- SET autocommit=0;
- REPEAT
-	SET i = i + 1;
-	INSERT INTO tbl_employee(emp_no,emp_name,emp_age,emp_post,dept_no) VALUES((begin_num+i),rand_str(6),rand_num(20,30),rand_post(),rand_num(100,10));
- UNTIL i = loop_count END REPEAT;
- COMMIT;
+  DECLARE i INT DEFAULT 0;
+  SET autocommit=0;
+  REPEAT
+    SET i = i + 1;
+	  INSERT INTO tbl_department(dept_no,dept_name) VALUES((begin_num+i),CONCAT("部门",i));
+  UNTIL i = loop_count END REPEAT;
+  COMMIT;
 END $$
 DELIMITER ;
 
-CALL insert_emp(1000,10000);
+CALL insertDept(100,10);
 
 
 
 
+-- 向员工表(tbl_employee)批量插入数据
+DROP PROCEDURE IF EXISTS insertEmp;
+DELIMITER $$
+CREATE PROCEDURE insertEmp(IN begin_num INT(10),IN loop_count INT(10))
+BEGIN
+  DECLARE i INT DEFAULT 0;
+  SET autocommit=0;
+  REPEAT
+    SET i = i + 1;
+	  INSERT INTO tbl_employee(emp_no,emp_name,emp_age,emp_post,dept_no) VALUES((begin_num+i),getRandStr(6),getRandNum(20,30),getRandPost(),getRandNum(100,10));
+  UNTIL i = loop_count END REPEAT;
+  COMMIT;
+END $$
+DELIMITER ;
+
+CALL insertEmp(1000,100000);
+
+
+
+
+-- 创建存储过程,用以删除已创建的索引。首先判断索引是否存在，存在则删除
 
 DROP PROCEDURE IF EXISTS dropIndex;
 DELIMITER $$
--- 创建存储过程，判断索引是否存在，存在则删除
 CREATE PROCEDURE dropIndex(IN databaseName VARCHAR(30),IN tableName VARCHAR(30),IN indexName VARCHAR(30))
 proc:BEGIN
  DECLARE str VARCHAR(512) DEFAULT NULL;
@@ -75,4 +74,3 @@ proc:BEGIN
  LEAVE proc;
 END $$
 DELIMITER ;
-
